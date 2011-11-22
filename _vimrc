@@ -60,6 +60,20 @@ set ignorecase
 set smartcase
 
 
+"在gvim中高亮当前行
+if (g:isGUI)
+    set cursorline
+    hi cursorline guibg=#87CEEB
+    hi CursorColumn guibg=#87CEEB
+    
+    "该高亮行配色非常适合于desert配色
+    "hi cursorline guibg=#333333
+    "hi CursorColumn guibg=#333333
+
+    "set guifont=Consolas\ 14
+    "set guifontwide=Consolas\ 14
+endif
+
 
 " 插件窗口的宽度，如TagList,NERD_tree等，自己设置
 let s:PlugWinSize = 30
