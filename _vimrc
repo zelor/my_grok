@@ -5,6 +5,7 @@ else
     let g:isWin = 0
 endif
 
+
 " ≈–∂œ «÷’∂Àªπ «gvim
 if has("gui_running")
     let g:isGUI = 1
@@ -16,7 +17,7 @@ endif
 set nocompatible
 source $VIMRUNTIME/vimrc_example.vim
 
-if has("g:isWin")
+if (g:isWin)
   source $VIMRUNTIME/mswin.vim
   behave mswin
 endif
@@ -26,7 +27,7 @@ set softtabstop=4 " unify
 set shiftwidth=4 " unify 
 set smarttab " use tabs at the start of a line, spaces elsewhere 
 " color koehler
-if has("g:isGUI")
+if (g:isGUI)
   colors puff
 endif
 
@@ -46,7 +47,7 @@ autocmd! bufwritepost *.vimrc source $VIM/_vimrc
 
 set history=100
 
-if has("g:isWin")
+if (g:isWin)
   set helplang=cn
   set backupdir=$VIM/data/backup " where to put backup file 
 endif
