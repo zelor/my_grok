@@ -1,26 +1,3 @@
-set nocompatible
-source $VIMRUNTIME/vimrc_example.vim
-source $VIMRUNTIME/mswin.vim
-behave mswin
-set expandtab  "not use TAB, use space
-set softtabstop=4 " unify 
-set shiftwidth=4 " unify 
-set smarttab " use tabs at the start of a line, spaces elsewhere 
-" color koehler
-colors puff
-set guifont=Courier_New:h11
-
-" It's used in the 'People's Republic of China'
-"set fileencodings=utf-8,prc
-"set fileencoding=prc
-"set encoding=prc 
-
-
-" 快捷打开编辑vimrc文件的键盘绑定
-map <silent> <leader>ee :e $VIM/_vimrc<cr>
-autocmd! bufwritepost *.vimrc source $VIM/_vimrc
-
-
 " 判断操作系统
 if (has("win32") || has("win64") || has("win32unix"))
     let g:isWin = 1
@@ -36,10 +13,50 @@ else
 endif
 
 
+set nocompatible
+source $VIMRUNTIME/vimrc_example.vim
+
+if has("g:isWin")
+  source $VIMRUNTIME/mswin.vim
+  behave mswin
+endif
+
+set expandtab  "not use TAB, use space
+set softtabstop=4 " unify 
+set shiftwidth=4 " unify 
+set smarttab " use tabs at the start of a line, spaces elsewhere 
+" color koehler
+if has("g:isGUI")
+  colors puff
+endif
+
+set guifont=Courier_New:h11
+
+" It's used in the 'People's Republic of China'
+"set fileencodings=utf-8,prc
+"set fileencoding=prc
+"set encoding=prc 
+
+
+" 快捷打开编辑vimrc文件的键盘绑定
+map <silent> <leader>ee :e $VIM/_vimrc<cr>
+autocmd! bufwritepost *.vimrc source $VIM/_vimrc
+
+
+
 set history=100
-set helplang=cn
-set backupdir=$VIM/data/backup " where to put backup file 
+
+if has("g:isWin")
+  set helplang=cn
+  set backupdir=$VIM/data/backup " where to put backup file 
+endif
+
+"TODO：此处增加对vim版本号的判断，若大于7则有效
 autocmd FileType c set omnifunc=ccomplete#Complete
+
+set incsearch
+set ignorecase
+set smartcase
 
 
 
