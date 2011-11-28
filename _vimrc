@@ -40,8 +40,13 @@ set guifont=Courier_New:h11
 
 
 " 快捷打开编辑vimrc文件的键盘绑定
-map <silent> <leader>ee :e $VIM/_vimrc<cr>
-autocmd! bufwritepost *.vimrc source $VIM/_vimrc
+if (g:isWin)
+  map <silent> <leader>ee :e $VIM/_vimrc<cr>
+  autocmd! bufwritepost *.vimrc source ~/_vimrc
+else
+  map <silent> <leader>ee :e ~/.vimrc<cr>
+  autocmd! bufwritepost *.vimrc source ~/.vimrc
+endif
 
 
 
@@ -175,7 +180,10 @@ inoremap <silent> <S-Tab> <C-R>=OmniComplete()<CR>
 
 
 
-set diffexpr=MyDiff()
+if (g:isWin)
+  set diffexpr=MyDiff()
+endif
+
 function MyDiff()
   let opt = '-a --binary '
   if &diffopt =~ 'icase' | let opt = opt . '-i ' | endif

@@ -5,6 +5,7 @@ else
     let g:isWin = 0
 endif
 
+
 " 判断是终端还是gvim
 if has("gui_running")
     let g:isGUI = 1
@@ -13,13 +14,10 @@ else
 endif
 
 
-
-
 set nocompatible
-
 source $VIMRUNTIME/vimrc_example.vim
 
-if has("g:isWin")
+if (g:isWin)
   source $VIMRUNTIME/mswin.vim
   behave mswin
 endif
@@ -29,8 +27,10 @@ set softtabstop=4 " unify
 set shiftwidth=4 " unify 
 set smarttab " use tabs at the start of a line, spaces elsewhere 
 " color koehler
+if (g:isGUI)
+  colors puff
+endif
 
-"colors puff
 set guifont=Courier_New:h11
 
 " It's used in the 'People's Republic of China'
@@ -40,24 +40,46 @@ set guifont=Courier_New:h11
 
 
 " 快捷打开编辑vimrc文件的键盘绑定
-"
-if has("g:isWin")
+if (g:isWin)
   map <silent> <leader>ee :e $VIM/_vimrc<cr>
+  autocmd! bufwritepost *.vimrc source ~/_vimrc
 else
   map <silent> <leader>ee :e ~/.vimrc<cr>
-endif
-
-if has("g:isWin")
-  autocmd! bufwritepost *.vimrc source $VIM/_vimrc
+  autocmd! bufwritepost *.vimrc source ~/.vimrc
 endif
 
 
 
 set history=100
-"set helplang=cn
-"set backupdir=$VIM/data/backup " where to put backup file 
-"autocmd FileType c set omnifunc=ccomplete#Complete
 
+if (g:isWin)
+  set helplang=cn
+  set backupdir=$VIM/data/backup " where to put backup file 
+else
+  set backupdir=~/.backup " where to put backup file 
+endif
+
+"TODO：此处增加对vim版本号的判断，若大于7则有效
+autocmd FileType c set omnifunc=ccomplete#Complete
+
+set incsearch
+set ignorecase
+set smartcase
+
+
+"在gvim中高亮当前行
+if (g:isGUI)
+    set cursorline
+    hi cursorline guibg=#87CEEB
+    hi CursorColumn guibg=#87CEEB
+    
+    "该高亮行配色非常适合于desert配色
+    "hi cursorline guibg=#333333
+    "hi CursorColumn guibg=#333333
+
+    "set guifont=Consolas\ 14
+    "set guifontwide=Consolas\ 14
+endif
 
 
 " 插件窗口的宽度，如TagList,NERD_tree等，自己设置
@@ -132,7 +154,36 @@ let g:C_Email        = 'zelor.chang@gmail.com'
 let g:C_Company      = 'PANOCOM'
 
 
-set diffexpr=MyDiff()
+" clever tab completion
+fun! KeywordComplete()
+    let left = strpart(getline('.'), col('.') - 2, 1)
+    if left =~ "^$"
+        return "\<Tab>"
+    elseif left =~ ' $'
+        return "\<Tab>"
+    else
+        return "\<C-N>"
+endfun
+inoremap <silent> <Tab> <C-R>=KeywordComplete()<CR>
+ 
+fun! OmniComplete()
+    let left = strpart(getline('.'), col('.') - 2, 1)
+    if left =~ "^$"
+        return ""
+    elseif left =~ ' $'
+        return ""
+    else
+        return "\<C-x>\<C-o>"
+endfun
+inoremap <silent> <S-Tab> <C-R>=OmniComplete()<CR>
+
+
+
+
+if (g:isWin)
+  set diffexpr=MyDiff()
+endif
+
 function MyDiff()
   let opt = '-a --binary '
   if &diffopt =~ 'icase' | let opt = opt . '-i ' | endif
@@ -144,9 +195,9 @@ function MyDiff()
   let arg3 = v:fname_out
   if arg3 =~ ' ' | let arg3 = '"' . arg3 . '"' | endif
   if &sh =~ '\<cmd'
-    silent execute '!""D:\Program Files\Vim\vim63\diff" ' . opt . arg1 . ' ' . arg2 . ' > ' . arg3 . '"'
+    silent execute '!""diff" ' . opt . arg1 . ' ' . arg2 . ' > ' . arg3 . '"'
   else
-    silent execute '!D:\Program" Files\Vim\vim63\diff" ' . opt . arg1 . ' ' . arg2 . ' > ' . arg3
+    silent execute '!diff" ' . opt . arg1 . ' ' . arg2 . ' > ' . arg3
   endif
 endfunction
 
