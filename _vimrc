@@ -50,6 +50,8 @@ set history=100
 if (g:isWin)
   set helplang=cn
   set backupdir=$VIM/data/backup " where to put backup file 
+else
+  set backupdir=~/.backup " where to put backup file 
 endif
 
 "TODO：此处增加对vim版本号的判断，若大于7则有效
