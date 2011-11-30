@@ -60,7 +60,7 @@ else
 endif
 
 "TODO：此处增加对vim版本号的判断，若大于7则有效
-autocmd FileType c set omnifunc=ccomplete#Complete
+"autocmd FileType c set omnifunc=ccomplete#Complete
 
 set incsearch
 set ignorecase
